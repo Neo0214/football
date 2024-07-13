@@ -1,7 +1,8 @@
 ﻿using football.Entities;
-using football.ExLibs;
+using pwd;
 using football.Models;
 using football.Repos;
+using Object_Storage;
 
 namespace football.Services.Impl
 {
@@ -9,6 +10,7 @@ namespace football.Services.Impl
     {
         private readonly UserRepo _userRepo;
         private readonly ClubRepo _clubRepo;
+
         public UserService(UserRepo userRepo, ClubRepo clubRepo)
         {
             _userRepo = userRepo;
@@ -18,7 +20,8 @@ namespace football.Services.Impl
         public User login(string username, string password)
         {
             User user = _userRepo.getUserByName(username);
-            if (user.Pwd == password)
+            string encodedPwd = PwdEncoder.EncryptString(password);
+            if (user.Pwd == encodedPwd)
             {
                 return user;
             }
@@ -34,10 +37,9 @@ namespace football.Services.Impl
             }
             return null;
         }
-        public string getUserAvatar(int userId)
+        public byte[] getUserAvatar(int userId)
         {
-            FileHandler fileHandler = new FileHandler();
-            return fileHandler.getUserAvatarById(userId);
+            return _userRepo.getUserAvatar(userId); // 取出对应User的头像（二进制数据）(byte[]
         }
         public UserHistoryListDTO getUserHistory(int userId)
         {
@@ -67,6 +69,29 @@ namespace football.Services.Impl
             };
             return _userRepo.AddHistoryAsync(info) ? "success" : "failed";
 
+        }
+
+        public string checkName(string newName)
+        {
+            if (_userRepo.getUserByName(newName) != null)
+            {
+                return "failed";
+            }
+            return "success";
+        }
+
+        public string register(RegisterDTO registerDTO)
+        {
+            string pwd = PwdEncoder.EncryptString(registerDTO.password);
+            User user = new User
+            {
+                Name = registerDTO.name,
+                Email = registerDTO.email,
+                TeleNumber = registerDTO.teleNumber,
+                Address = registerDTO.address,
+                Pwd = pwd
+            };
+            return _userRepo.addUser(user) ? "success" : "failed";
         }
     }
 }

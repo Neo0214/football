@@ -7,8 +7,10 @@ namespace football.Services
     {
         User login(string username, string password);
         UserInfoDTO getUserInfo(int userId);
-        string getUserAvatar(int userId);
+        byte[] getUserAvatar(int userId);
         UserHistoryListDTO getUserHistory(int userId);
         string addHistory(int userId, AddHistoryDTO addHistoryDTO);
+        string checkName(string newName);
+        string register(RegisterDTO registerDTO);
     }
 }

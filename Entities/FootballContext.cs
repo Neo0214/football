@@ -36,7 +36,7 @@ public partial class FootballContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseMySql("server=127.0.0.1;port=3306;database=football;uid=root;pwd=hinihao123", Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.34-mysql"));
+        => optionsBuilder.UseMySql("server=localhost;port=3306;database=football;uid=root;pwd=hinihao123", Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.34-mysql"));
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -76,6 +76,9 @@ public partial class FootballContext : DbContext
             entity.ToTable("club");
 
             entity.Property(e => e.ClubId).HasColumnName("club_id");
+            entity.Property(e => e.AvatarId)
+                .HasMaxLength(256)
+                .HasColumnName("avatar_id");
             entity.Property(e => e.ClubName)
                 .HasMaxLength(255)
                 .HasColumnName("club_name");
@@ -184,6 +187,9 @@ public partial class FootballContext : DbContext
             entity.ToTable("nation");
 
             entity.Property(e => e.NationId).HasColumnName("nation_id");
+            entity.Property(e => e.AvatarId)
+                .HasMaxLength(256)
+                .HasColumnName("avatar_id");
             entity.Property(e => e.NationName)
                 .HasMaxLength(255)
                 .HasColumnName("nation_name");
@@ -219,6 +225,9 @@ public partial class FootballContext : DbContext
             entity.ToTable("player");
 
             entity.Property(e => e.PlayerId).HasColumnName("player_id");
+            entity.Property(e => e.AvatarId)
+                .HasMaxLength(256)
+                .HasColumnName("avatar_id");
             entity.Property(e => e.Defence).HasColumnName("defence");
             entity.Property(e => e.Dribble).HasColumnName("dribble");
             entity.Property(e => e.Energy).HasColumnName("energy");
@@ -282,6 +291,7 @@ public partial class FootballContext : DbContext
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Cost).HasColumnName("cost");
             entity.Property(e => e.From).HasColumnName("from");
+            entity.Property(e => e.PlayerId).HasColumnName("player_id");
             entity.Property(e => e.To).HasColumnName("to");
 
             entity.HasOne(d => d.FromNavigation).WithMany(p => p.TransferFromNavigations)
@@ -305,6 +315,9 @@ public partial class FootballContext : DbContext
             entity.Property(e => e.Address)
                 .HasMaxLength(255)
                 .HasColumnName("address");
+            entity.Property(e => e.AvatarId)
+                .HasMaxLength(256)
+                .HasColumnName("avatar_id");
             entity.Property(e => e.Email)
                 .HasMaxLength(255)
                 .HasColumnName("email");

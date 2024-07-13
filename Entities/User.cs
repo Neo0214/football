@@ -17,6 +17,8 @@ public partial class User
 
     public string? Address { get; set; }
 
+    public string? AvatarId { get; set; }
+
     public virtual ICollection<Chat> Chat_1s { get; set; } = new List<Chat>();
 
     public virtual ICollection<Chat> Chat_2s { get; set; } = new List<Chat>();

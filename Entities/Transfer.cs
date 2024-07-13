@@ -13,6 +13,8 @@ public partial class Transfer
 
     public int? Cost { get; set; }
 
+    public int PlayerId { get; set; }
+
     public virtual Club FromNavigation { get; set; } = null!;
 
     public virtual Club ToNavigation { get; set; } = null!;

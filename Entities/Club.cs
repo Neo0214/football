@@ -11,6 +11,8 @@ public partial class Club
 
     public int? Score { get; set; }
 
+    public string? AvatarId { get; set; }
+
     public virtual ICollection<Transfer> TransferFromNavigations { get; set; } = new List<Transfer>();
 
     public virtual ICollection<Transfer> TransferToNavigations { get; set; } = new List<Transfer>();

@@ -51,17 +51,10 @@ namespace football.Controllers
         [Authorize]
         public ActionResult getUserAvatar([FromQuery] int userId)
         {
-            string imagePath = _service.getUserAvatar(userId);
-            var imageFileStream = new FileStream(imagePath, FileMode.Open, FileAccess.Read);
-            var imageExtension = Path.GetExtension(imagePath).ToLowerInvariant();
-            string mimeType = imageExtension switch
-            {
-                ".jpg" or ".jpeg" => "image/jpeg",
-                ".png" => "image/png",
-                ".gif" => "image/gif",
-                _ => "application/octet-stream",
-            };
-            return File(imageFileStream, mimeType);
+            byte[] content = _service.getUserAvatar(userId);
+            if (content == null)
+                return NotFound();
+            return File(content, "application/octet-stream");
         }
 
         [HttpPost]
@@ -85,6 +78,18 @@ namespace football.Controllers
             var tokenS = tokenHandle.ReadJwtToken(token);
             var userId = int.Parse(tokenS.Claims.ToArray()[0].Value);
             return Ok(_service.addHistory(userId, addHistoryDTO));
+        }
+
+        [HttpPost]
+        public ActionResult checkName([FromBody] CheckNameDTO checkNameDTO)
+        {
+            return Ok(_service.checkName(checkNameDTO.name));
+        }
+
+        [HttpPost]
+        public ActionResult register([FromBody] RegisterDTO registerDTO)
+        {
+            return Ok(_service.register(registerDTO));
         }
     }
 }

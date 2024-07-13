@@ -11,5 +11,7 @@ public partial class Nation
 
     public int? Score { get; set; }
 
+    public string? AvatarId { get; set; }
+
     public virtual ICollection<Player> Players { get; set; } = new List<Player>();
 }

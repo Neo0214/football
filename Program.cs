@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Object_Storage;
 
 namespace YourProject
 {
@@ -72,6 +73,14 @@ namespace YourProject
                         services.AddScoped<IClub, ClubService>();
                         services.AddScoped<PlayerRepo>();
                         services.AddScoped<IPlayer, PlayerService>();
+                        services.AddScoped<TransferRepo>();
+                        services.AddScoped<ITransfer, TransferService>();
+                        services.AddScoped<NationRepo>();
+                        services.AddScoped<INation, NationService>();
+                        services.AddScoped<TrainRepo>();
+                        services.AddScoped<ITrain, TrainService>();
+                        // OSS 存储服务
+                        services.AddSingleton(ObjectStorageContext.Instance);
 
 
                         services.AddSwaggerGen(c =>
@@ -118,7 +127,11 @@ namespace YourProject
                             c.SwaggerEndpoint("/swagger/v1/swagger.json", "Football API V1");
                             c.RoutePrefix = string.Empty; // To serve Swagger UI at application's root
                         });
-
+                        // 添加 WebSocket Controller 路由
+                        app.UseEndpoints(endpoints =>
+                        {
+                            endpoints.MapControllers();
+                        });
                         app.UseEndpoints(endpoints =>
                         {
                             endpoints.MapControllers();

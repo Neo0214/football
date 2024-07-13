@@ -29,6 +29,8 @@ public partial class Player
 
     public int? Vel { get; set; }
 
+    public string? AvatarId { get; set; }
+
     public virtual ICollection<Club> Clubs { get; set; } = new List<Club>();
 
     public virtual ICollection<Nation> Nations { get; set; } = new List<Nation>();

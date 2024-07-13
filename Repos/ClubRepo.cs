@@ -2,15 +2,18 @@
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.EntityFrameworkCore;
 using MySqlConnector;
+using Object_Storage;
 
 namespace football.Repos
 {
     public class ClubRepo
     {
         private readonly FootballContext _context;
-        public ClubRepo(FootballContext context)
+        private readonly ObjectStorageContext _OSS;
+        public ClubRepo(FootballContext context, ObjectStorageContext objectStorageContext)
         {
             _context = context;
+            _OSS = objectStorageContext;
         }
         public int getClubIdByUserId(int id)
         {
@@ -46,6 +49,17 @@ namespace football.Repos
         {
             Club club = _context.Clubs.Single(club => club.ClubId == clubId);
             return club.ClubName;
+        }
+        public byte[] getClubLogo(int clubId)
+        {
+            // get club avatar id
+            string avatarId = _context.Clubs.Where(club => club.ClubId == clubId).Select(club => club.AvatarId).FirstOrDefault();
+            // get club avatar  
+            return _OSS.fetchFile(avatarId);
+        }
+        public List<Club> getAllClub()
+        {
+            return _context.Clubs.ToList();
         }
     }
 }

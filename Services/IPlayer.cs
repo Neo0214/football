@@ -1,4 +1,5 @@
 ﻿using football.Models;
+using football.Entities;
 
 namespace football.Services
 {
@@ -6,6 +7,10 @@ namespace football.Services
     {
         TransferDTO getAllPlayerTransfer();
         DataDTO getAllPlayerData();
-        string getPlayerPic(int playerId);
+        byte[] getPlayerPic(int playerId);
+        UploadDTO addPlayer(AddPlayerDTO playerDTO);
+        PicOkDTO uploadPlayerPic(IFormFile file, int playerId);
+        PlayerDetailDTO getPlayerDetail(int playerId);
+        MyPlayerDTO getMyPlayer(int clubId);
     }
 }

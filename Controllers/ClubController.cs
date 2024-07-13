@@ -32,19 +32,13 @@ namespace football.Controllers
 
         }
         [HttpGet]
-        public IActionResult getClubLogo([FromQuery] int clubId)
+        public ActionResult getClubLogo([FromQuery] int clubId)
         {
-            string imagePath = _service.getClubLogo(clubId);
-            var imageFileStream = new FileStream(imagePath, FileMode.Open, FileAccess.Read);
-            var imageExtension = Path.GetExtension(imagePath).ToLowerInvariant();
-            string mimeType = imageExtension switch
-            {
-                ".jpg" or ".jpeg" => "image/jpeg",
-                ".png" => "image/png",
-                ".gif" => "image/gif",
-                _ => "application/octet-stream",
-            };
-            return File(imageFileStream, mimeType);
+            byte[] content = _service.getClubLogo(clubId);
+            if (content == null)
+                return NotFound();
+            return File(content, "application/octet-stream");
+
         }
         [HttpPost]
         [Authorize]
@@ -52,5 +46,20 @@ namespace football.Controllers
         {
             return Ok(_service.getClubNameById(clubNameReq.clubId));
         }
+
+        [HttpGet]
+        [Authorize]
+        public ActionResult getAllClubs([FromQuery] int curClub)
+        {
+            return Ok(_service.getAllClubs(curClub));
+        }
+
+        [HttpGet]
+        [Authorize]
+        public ActionResult getAllClubsWithScore([FromQuery] int curClub)
+        {
+            return Ok(_service.getAllClubsWithScore(curClub));
+        }
+
     }
 }
